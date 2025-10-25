@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
 import { DroneController } from '../controllers';
+import { droneSchema, loadMedicationSchema, validateSchema } from '../schemas';
 
 const router = Router();
 
@@ -8,10 +9,10 @@ export function registerDroneRoutes() {
     const droneController = container.resolve(DroneController);
 
     // Register a drone
-    router.post("/drones", (req, res) => droneController.registerDrone(req, res));
+    router.post("/drones", validateSchema(droneSchema), (req, res) => droneController.registerDrone(req, res));
 
     // Load a drone with medications
-    router.post("/drones/:serial/load", (req, res) => droneController.registerDrone(req, res));
+    router.post("/drones/:serial/load", validateSchema(loadMedicationSchema), (req, res) => droneController.registerDrone(req, res));
 
     // Get loaded medications for a drone
     router.get("/drones/:serial/medications", (req, res) => droneController.registerDrone(req, res));
