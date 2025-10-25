@@ -14,6 +14,6 @@ export const AppDataSource = new DataSource({
     entities: [join(__dirname, '/../lib/entities/**/*.entity.{ts,js}')],
     migrations: [join(__dirname, '/../lib/migrations/**/*.migration.{ts,js}')],
     migrationsTableName: 'migrations_history',
-    synchronize: process.env['NODE_ENV'] !== 'production',
+    synchronize: true, // process.env['NODE_ENV'] !== 'production',
     logging: false,
 });
