@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, UpdateDateColumn, Index, OneToMany } from 'typeorm';
 import { DroneMedication } from './drone-medication.entity';
-import { DroneStateEnum } from '../enums';
 
 
 @Entity('medications')
