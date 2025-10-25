@@ -1,0 +1,1 @@
+export type DroneState = 'IDLE' | 'LOADING' | 'LOADED' | 'DELIVERING' | 'DELIVERED' | 'RETURNING';

@@ -1,0 +1,24 @@
+services:
+  drone-transport-service-postgres:
+    image: postgres:17.2
+    container_name: drone-transport-service
+    environment:
+      POSTGRES_USER: drone_transport
+      POSTGRES_PASSWORD: drone_transport
+      POSTGRES_DB: drone_transport
+    ports:
+      - "7432:5432"
+    networks:
+      - drone-transport-service
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U drone_transport -d drone_transport"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+networks:
+  drone-transport-service:
+    driver: bridge
+
+volumes:
+  postgres-data:
+    driver: local
