@@ -8,14 +8,19 @@ import { AppDataSource } from './config/typeorm.config';
 import { seed } from './lib/seeders';
 import { registerDroneRoutes } from './routes';
 import { BatteryLog, Drone } from './lib';
+import { registerRepository } from './config';
 
 dotenv.config();
 
 const PORT = process.env.PORT ? Number(process.env.PORT) : 3000;
 
 async function start() {
+
     // Initialize Database
     await AppDataSource.initialize();
+
+    // Register Repositories
+    await registerRepository();
 
     // Automatically create 10 fleet (drones)
     await seed();
