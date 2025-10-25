@@ -71,7 +71,7 @@ export class DroneController {
 
     async loadableDrone(req: Request, res: Response) {
         try {
-            const kg = req.body;
+            const kg = req.body.kg;
             const result = await this.droneService.getLoadableDrone(kg);
             return res.status(201).json({ success: true, status: 'success', data: result });
         } catch (err: any) {

@@ -87,7 +87,7 @@ export const medicationSchema = Joi.object({
             "string.empty": "Pickup phone number is required",
         }),
 
-    deliverNumber: Joi.string()
+    deliveryNumber: Joi.string()
         .pattern(/^(?:\+234|234|0)(?:70|80|81|90|91|70|71)\d{8}$/)
         .required()
         .messages({

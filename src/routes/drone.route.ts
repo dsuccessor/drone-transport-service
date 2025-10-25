@@ -12,19 +12,19 @@ export function registerDroneRoutes() {
     router.post("/drones", validateSchema(droneSchema), (req, res) => droneController.registerDrone(req, res));
 
     // Load a drone with medications
-    router.post("/drones/:serial/load", validateSchema(loadMedicationSchema), (req, res) => droneController.registerDrone(req, res));
+    router.post("/drones/:serial/load", validateSchema(loadMedicationSchema), (req, res) => droneController.loadDrone(req, res));
 
     // Get loaded medications for a drone
-    router.get("/drones/:serial/medications", (req, res) => droneController.registerDrone(req, res));
+    router.get("/drones/:serial/medications", (req, res) => droneController.droneLoads(req, res));
 
     // Get available drones for loading
-    router.get("/drones/available", (req, res) => droneController.registerDrone(req, res));
+    router.get("/drones/available", (req, res) => droneController.loadableDrone(req, res));
 
     // Get Drones battery level
-    router.get("/drones/:serial/battery", (req, res) => droneController.registerDrone(req, res));
+    router.get("/drones/:serial/battery", (req, res) => droneController.droneBatteryLevel(req, res));
 
     // Get battery logs
-    router.get("/logs/battery", (req, res) => droneController.registerDrone(req, res));
+    router.get("/logs/battery", (req, res) => droneController.dronesBatteryLogs(req, res));
 
     return router;
 }
