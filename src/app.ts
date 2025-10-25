@@ -9,6 +9,7 @@ import { seed } from './lib/seeders';
 import { registerDroneRoutes } from './routes';
 import { BatteryLog, Drone } from './lib';
 import { registerRepository } from './config';
+import { logRoutes } from './lib/middleware';
 
 dotenv.config();
 
@@ -59,6 +60,9 @@ async function start() {
     app.use('/api', droneRouter);
 
     const server = app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
+
+    // log all routes
+    logRoutes(app._router.stack);
 
     // Battery checker: runs every 10 minutes and writes battery log entries  
     setInterval(async () => {
