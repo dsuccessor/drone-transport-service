@@ -24,9 +24,9 @@ Data format: all input/output in JSON.
 
 # How to run
 
-Setting up database
-
 # Run and start docker
+
+==> Setting up database
 
 download docker locally
 
@@ -50,7 +50,7 @@ pnpm run build
 
 pnpm run start
 
-# or for development directly (build & start)
+# For development directly (build & start)
 
 npm run dev
 
@@ -58,11 +58,13 @@ The app will create all tables (drone, medication, droneMedication, batteryLog) 
 
 # API Endpoints (summary)
 
-All endpoints accept and return JSON.
+=> All endpoints accept and return JSON.
 
-POST /api/drones — Register a drone (body: drone object)
+# Register/Create Drone
 
-# Payload Sample
+=> POST /api/drones — Register a drone (body: drone object)
+
+=> Payload Sample <=
 
 {
 "serial": "DRONE-002",
@@ -71,9 +73,11 @@ POST /api/drones — Register a drone (body: drone object)
 "battery_capacity": 40
 }
 
-POST /api/drones/:serial/load — Load a drone with medications (body: medication array)
+# Load Drone
 
-# Payload Sample
+=> POST /api/drones/:serial/load — Load a drone with medications (body: medication array)
+
+=> Payload Sample <=
 
 [{
 "name": "Paracetamol_500",
@@ -94,9 +98,11 @@ POST /api/drones/:serial/load — Load a drone with medications (body: medicatio
 "medicationImage": "https://example.com/images/amoxicillin_250.png"
 }]
 
-GET /api/drones/:serial/medications — Get loaded medication items for a drone
+# Get Drone-Load
 
-# Sample Response
+=> GET /api/drones/:serial/medications — Get loaded medication items for a drone
+
+=> Payload Sample <=
 
 {
 "success": true,
@@ -121,9 +127,11 @@ GET /api/drones/:serial/medications — Get loaded medication items for a drone
 }]
 }
 
-GET /api/drones/available — Get drones available for loading
+# Get Available (Loadable) Drone
 
-# Sample Response
+=> GET /api/drones/available — Get drones available for loading
+
+=> Payload Sample <=
 
 {
 "success": true,
@@ -139,9 +147,11 @@ GET /api/drones/available — Get drones available for loading
 }]
 }
 
-GET /api/drones/:serial/battery — Get battery level for a drone
+# Get Drone Battery Level
 
-# Sample Response
+=> GET /api/drones/:serial/battery — Get battery level for a drone
+
+=> Payload Sample <=
 
 {
 "success": true,
@@ -155,9 +165,11 @@ GET /api/drones/:serial/battery — Get battery level for a drone
 }
 }
 
-GET /api/logs/battery — Get battery audit logs (paginated)
+# Get Drone battery logs
 
-# Sample Response
+=> GET /api/logs/battery — Get battery audit logs (paginated)
+
+=> Payload Sample <=
 
 {
 "success": true,
