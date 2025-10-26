@@ -39,6 +39,7 @@ export class DroneService {
 
         const drone = await this.droneRepo.findOne({ where: { serial }, relations: ['medications', 'medications.medication'] });
         if (!drone) throw new AppError('drone not found', 400);
+        console.log({ drone });
 
         // Prevent the drone from getting use when on non loadable state;
         if (NonLoadableStatus.has(drone.state)) throw new AppError(`Drone is not in a loadable state, currently ${drone.state}`, 400);
@@ -68,12 +69,13 @@ export class DroneService {
             await AppDataSource.transaction(async (manager) => {
                 const droneMedicRepo = manager.getRepository(DroneMedication);
                 const medicRepo = manager.getRepository(Medication);
-
+                console.log({ m });
                 // create medication rows and link
                 const med = await medicRepo.save({ name: m.name, weight: Number(m.weight), code: m.code, medicationImage: m.medicationImage });
+                console.log({ med });
 
                 // create delivery order
-                await droneMedicRepo.save({ pickupNumber: "", deliveryNumber: "", address: "", drone: { serial: drone.serial }, medication: { id: med.id }, status: DroneStateEnum.LOADED });
+                await droneMedicRepo.save({ pickupNumber: m.pickupNumber, deliveryNumber: m.deliveryNumber, address: m.address, drone: { serial: drone.serial }, medication: { id: med.id }, status: DroneStateEnum.LOADED });
             })
         }
 
