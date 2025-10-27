@@ -1,4 +1,4 @@
-import { Repository } from "typeorm";
+import { In, MoreThan, Repository } from "typeorm";
 import { IDrone, IMedication } from "../interfaces";
 import { BatteryLog, Drone, DroneConst, DroneMedication, DroneStateEnum, LoadableStatus, Medication, NonLoadableStatus } from "../lib";
 import { inject, injectable } from "tsyringe";
@@ -48,7 +48,12 @@ export class DroneService {
 
         // calculate current load on drone  
         const currentWeight = (drone.medications || []).reduce((s, dm) => s + (dm.medication?.weight || 0), 0);
-        if (currentWeight >= drone.weightLimit) {
+        if (currentWeight === drone.weightLimit) {
+            // Set to loaded
+            // If it is charged, currently on loadable status && on max weight
+            if (!NonLoadableStatus.has(drone.state)) {
+                await this.droneRepo.update({ serial: drone.serial }, { state: DroneStateEnum.LOADED });
+            }
             throw new AppError('Drone weight limit already reached');
         }
 
@@ -56,11 +61,6 @@ export class DroneService {
 
         // Prevent the drone from being loaded with more weight that it can carry
         if ((currentWeight + incomingWeight) > drone.weightLimit) {
-            // Set to loaded
-            // If it is charged, currently on loadable status && on max weight
-            if (!NonLoadableStatus.has(drone.state)) {
-                await this.droneRepo.update({ serial: drone.serial }, { state: DroneStateEnum.LOADED });
-            }
             throw new AppError(`Drone Load Weight would be exceeded with this request load! [current load: ${currentWeight}kg | incoming load: ${incomingWeight}kg]`);
         }
 
@@ -83,16 +83,28 @@ export class DroneService {
     }
 
     // get available drone based on available load space on drones
-    async getLoadableDrone(kg: number): Promise<Partial<Drone>[]> {
-        let drones = await this.droneRepo.find({ relations: ['medications', 'medications.medication'] });
+    async getLoadableDrone(weight: number | null): Promise<Partial<Drone>[]> {
+        const condition = {
+            state: In([...LoadableStatus]),
+            batteryCapacity: MoreThan(DroneConst.MinLoadableBatteryCapacity)
+        };
+
         // extract loadable drones based on loadable state and loadable battery capacity
-        drones = drones.filter(d => LoadableStatus.has(d.state) && d.batteryCapacity > DroneConst.MinLoadableBatteryCapacity);
-        // extract loadable drones based on request load (kilogram)
-        return drones.filter(d => {
-            const currentWeight = (d.medications || []).reduce((s, dm) => s + (dm.medication?.weight || 0), 0);
-            const estimatedTotalWeight = currentWeight + kg;
-            return d.weightLimit >= estimatedTotalWeight;
-        }).map(d => ({
+        let drones = await this.droneRepo.find({
+            where: condition,
+            relations: ['medications', 'medications.medication']
+        });
+
+        // extract loadable drones based on request load (gram)
+        if (weight) {
+            drones = drones.filter(d => {
+                const currentWeight = (d.medications || []).reduce((s, dm) => s + (dm.medication?.weight || 0), 0);
+                const estimatedTotalWeight = currentWeight + weight;
+                return d.weightLimit >= estimatedTotalWeight;
+            })
+        }
+
+        return drones.map(d => ({
             serial: d.serial,
             model: d.model,
             weightLimit: d.weightLimit,
@@ -121,8 +133,9 @@ export class DroneService {
     };
 
     // Get battery logs
-    async getBatteryLogs(): Promise<BatteryLog[]> {
-        const logs = await this.batteryRepo.find({ order: { createdAt: 'DESC' }, take: 100 });
+    async getBatteryLogs(perPage: number = 20, page: number = 1): Promise<BatteryLog[]> {
+        const skip = perPage * (page - 1);
+        const logs = await this.batteryRepo.find({ order: { createdAt: 'DESC' }, take: perPage, skip });
         return logs;
     };
 }

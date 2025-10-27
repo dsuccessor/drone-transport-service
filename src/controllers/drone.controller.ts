@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { inject, injectable } from "tsyringe";
 import { DroneService } from "../services";
-import { AppError } from "../lib/utils";
 
 @injectable()
 export class DroneController {
@@ -10,118 +9,39 @@ export class DroneController {
         private readonly droneService: DroneService,
     ) { }
 
-    async registerDrone(req: Request, res: Response) {
-        try {
-            const request = req.body;
-            const result = await this.droneService.createDrone(request);
-            return res.status(201).json({ success: true, status: 'success', data: result });
-        } catch (err: any) {
-            const error = {
-                message: err?.message ?? "Something went wrong",
-                statusCode: 500
-            }
-
-            if (err instanceof AppError) {
-                if (err?.statusCode) error.statusCode = err.statusCode;
-                console.error(`Error code: ${error.statusCode}, message: ${error.message}`);
-            }
-            return res.status(error.statusCode).json({ success: false, status: 'failed', error: error.message });
-        }
+    registerDrone = async (req: Request, res: Response) => {
+        const request = req.body;
+        const result = await this.droneService.createDrone(request);
+        return res.status(201).json({ success: true, status: 'success', data: result });
     }
 
-    async loadDrone(req: Request, res: Response) {
-        try {
-            const request = req.body;
-            const serial = req.params.serial;
-
-            const result = await this.droneService.loadDrone(serial, request);
-            return res.status(201).json({ success: true, status: 'success', data: result });
-        } catch (err: any) {
-            const error = {
-                message: err?.message ?? "Something went wrong",
-                statusCode: 500
-            }
-
-            if (err instanceof AppError) {
-                if (err?.statusCode) error.statusCode = err.statusCode;
-                console.error(`Error code: ${error.statusCode}, message: ${error.message}`);
-            }
-            return res.status(error.statusCode).json({ success: false, status: 'failed', error: error.message });
-        }
+    loadDrone = async (req: Request, res: Response) => {
+        const request = req.body;
+        const serial = req.params.serial;
+        const result = await this.droneService.loadDrone(serial, request);
+        return res.status(201).json({ success: true, status: 'success', data: result });
     }
 
-    async droneLoads(req: Request, res: Response) {
-        try {
-            const serial = req.params.serial;
-            const result = await this.droneService.getDroneLoads(serial);
-            return res.status(201).json({ success: true, status: 'success', data: result });
-        } catch (err: any) {
-            const error = {
-                message: err?.message ?? "Something went wrong",
-                statusCode: 500
-            }
-
-            if (err instanceof AppError) {
-                if (err?.statusCode) error.statusCode = err.statusCode;
-                console.error(`Error code: ${error.statusCode}, message: ${error.message}`);
-            }
-            return res.status(error.statusCode).json({ success: false, status: 'failed', error: error.message });
-        }
+    droneLoads = async (req: Request, res: Response) => {
+        const serial = req.params.serial;
+        const result = await this.droneService.getDroneLoads(serial);
+        return res.status(201).json({ success: true, status: 'success', data: result });
     }
 
-    async loadableDrone(req: Request, res: Response) {
-        try {
-            const kg = req.body.kg;
-            const result = await this.droneService.getLoadableDrone(kg);
-            return res.status(201).json({ success: true, status: 'success', data: result });
-        } catch (err: any) {
-            const error = {
-                message: err?.message ?? "Something went wrong",
-                statusCode: 500
-            }
-
-            if (err instanceof AppError) {
-                if (err?.statusCode) error.statusCode = err.statusCode;
-                console.error(`Error code: ${error.statusCode}, message: ${error.message}`);
-            }
-            return res.status(error.statusCode).json({ success: false, status: 'failed', error: error.message });
-        }
+    loadableDrone = async (req: Request, res: Response) => {
+        const weight = req.query.weight ? Number(req.query.weight) : null;
+        const result = await this.droneService.getLoadableDrone(weight);
+        return res.status(201).json({ success: true, status: 'success', data: result });
     }
 
-    async droneBatteryLevel(req: Request, res: Response) {
-        try {
-            const serial = req.params.serial;
-            const result = await this.droneService.getDroneBatteryLevel(serial);
-            return res.status(201).json({ success: true, status: 'success', data: result });
-        } catch (err: any) {
-            const error = {
-                message: err?.message ?? "Something went wrong",
-                statusCode: 500
-            }
-
-            if (err instanceof AppError) {
-                if (err?.statusCode) error.statusCode = err.statusCode;
-                console.error(`Error code: ${error.statusCode}, message: ${error.message}`);
-            }
-            return res.status(error.statusCode).json({ success: false, status: 'failed', error: error.message });
-        }
+    droneBatteryLevel = async (req: Request, res: Response) => {
+        const serial = req.params.serial;
+        const result = await this.droneService.getDroneBatteryLevel(serial);
+        return res.status(201).json({ success: true, status: 'success', data: result });
     }
 
-    async dronesBatteryLogs(req: Request, res: Response) {
-        try {
-            const result = await this.droneService.getBatteryLogs();
-            return res.status(201).json({ success: true, status: 'success', data: result });
-        } catch (err: any) {
-            const error = {
-                message: err?.message ?? "Something went wrong",
-                statusCode: 500
-            }
-
-            if (err instanceof AppError) {
-                if (err?.statusCode) error.statusCode = err.statusCode;
-                console.error(`Error code: ${error.statusCode}, message: ${error.message}`);
-            }
-            return res.status(error.statusCode).json({ success: false, status: 'failed', error: error.message });
-        }
+    dronesBatteryLogs = async (req: Request, res: Response) => {
+        const result = await this.droneService.getBatteryLogs();
+        return res.status(201).json({ success: true, status: 'success', data: result });
     }
 }

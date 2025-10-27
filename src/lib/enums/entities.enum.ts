@@ -5,8 +5,6 @@ export enum DroneStateEnum {
     DELIVERING = 'DELIVERING',
     DELIVERED = 'DELIVERED',
     RETURNING = 'RETURNING',
-    AVAILABLE = 'AVAILABLE',
-    UNAVAILABLE = "UNAVAILABLE"
 }
 
 export enum DroneModelEnum {
@@ -22,15 +20,13 @@ export enum DroneConst {
 }
 
 export const NonLoadableStatus = new Set([
-    DroneStateEnum.UNAVAILABLE,
     DroneStateEnum.LOADED,
     DroneStateEnum.DELIVERING,
-    DroneStateEnum.DELIVERING,
     DroneStateEnum.RETURNING,
+    DroneStateEnum.DELIVERED,
 ]);
 
 export const LoadableStatus = new Set([
     DroneStateEnum.IDLE,
     DroneStateEnum.LOADING,
-    DroneStateEnum.AVAILABLE,
 ]);

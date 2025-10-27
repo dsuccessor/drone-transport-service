@@ -5,11 +5,12 @@ import bodyParser from 'body-parser';
 import morgan from 'morgan';
 import * as dotenv from 'dotenv';
 import { AppDataSource } from './config/typeorm.config';
-import { seed } from './lib/seeders';
 import { registerDroneRoutes } from './routes';
-import { BatteryLog, Drone } from './lib';
 import { registerRepository } from './config';
 import { logRoutes } from './lib/middleware';
+import { handleError } from './lib/utils';
+import { seed } from './lib/seeders';
+import { droneBatteryLog } from './jobs';
 
 dotenv.config();
 
@@ -59,30 +60,17 @@ async function start() {
     const droneRouter = registerDroneRoutes();
     app.use('/api', droneRouter);
 
+    // handle error globally
+    app.use(handleError());
+
     const server = app.listen(PORT, () => console.log(`Server running on http://localhost:${PORT}`));
 
     // log all routes
     logRoutes(app._router.stack);
 
-    // Battery checker: runs every 10 minutes and writes battery log entries  
-    setInterval(async () => {
-        try {
-            const droneRepo = AppDataSource.getRepository(Drone);
-            const logRepo = AppDataSource.getRepository(BatteryLog);
-            const drones = await droneRepo.find();
-
-            for (const d of drones) {
-                await logRepo.save({ droneSerial: d.serial, batteryLevel: d.batteryCapacity, description: "N/A" });
-            }
-
-            console.log('Battery check logged for', drones.length, 'drones');
-
-        } catch (err) {
-
-            console.error('Battery check failed', err);
-
-        }
-    }, 1000 * 60 * 10);
+    //move to separate file with a function pass time
+    // Battery checker: runs every 10 minutes and writes battery log entries
+    droneBatteryLog(1000 * 60 * 10);
 
     // exit (close server before shutting down)
     function gracefulExit(signal?: string) {

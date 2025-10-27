@@ -8,6 +8,13 @@
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "build": "tsc",
     "start": "node dist/app.js",
+    "start:prod": "node dist/app.js",
+    "typeorm": "typeorm-ts-node-commonjs",
+    "migration:generate": "typeorm migration:generate ./src/lib/migrations/InitMigration -d ./typeorm-cli.js",
+    "migration:run": "typeorm migration:run -d ./typeorm-cli.js",
+    "migration:revert": "typeorm migration:revert -d ./typeorm-cli.js",
+    "seed": "pnpm ts-node src/lib/seeders/seed.ts",
+    "seed:prod": "node dist/lib/seeders/seed.js",
     "jest:config": "npx ts-jest config:init"
   },
   "keywords": [],
@@ -21,11 +28,9 @@
     "express": "^4.18.2",
     "joi": "^18.0.1",
     "morgan": "^1.10.0",
-    "pg": "^8.16.3",
     "reflect-metadata": "^0.1.13",
     "sqlite3": "^5.1.6",
-    "tsyringe": "^4.10.0",
-    "typeorm": "^0.3.17"
+    "tsyringe": "^4.10.0"
   },
   "devDependencies": {
     "@types/body-parser": "^1.19.6",
@@ -33,9 +38,14 @@
     "@types/jest": "^30.0.0",
     "@types/morgan": "^1.9.4",
     "@types/node": "^20.2.5",
+    "install": "^0.13.0",
     "jest": "^30.2.0",
+    "pg": "^8.16.3",
     "ts-jest": "^29.4.5",
+    "ts-node": "^10.9.2",
     "ts-node-dev": "^2.0.0",
+    "typeorm": "^0.3.17",
+    "typeorm-ts-node-commonjs": "^0.3.20",
     "typescript": "^5.1.6"
   }
 }

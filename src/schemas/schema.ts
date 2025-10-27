@@ -124,3 +124,17 @@ export const loadMedicationSchema = Joi.array()
         'array.base': 'Medications must be an array',
         'array.min': 'At least one medication object is required',
     });
+
+export const getLoadableDroneSchema = Joi.object({
+    weight: Joi.number()
+        .positive()
+        .integer()
+        .max(500)
+        .optional()
+        .messages({
+            'number.base': 'Weight must be a number',
+            'number.integer': 'Weight must be an integer',
+            'number.positive': 'Weight must be a positive number',
+            'number.max': 'Weight must be less than or equal to 500',
+        })
+});

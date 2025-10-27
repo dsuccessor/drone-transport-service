@@ -1,13 +1,13 @@
 import 'reflect-metadata';
 import { Repository } from 'typeorm';
-import { Drone, DroneMedication, Medication, BatteryLog, DroneStateEnum } from '../lib';
-import { DroneService } from './drone.service';
-import { AppError } from '../lib/utils';
-import { AppDataSource } from '../config';
+import { Drone, DroneMedication, Medication, BatteryLog, DroneStateEnum } from '../src/lib';
+import { DroneService } from '../src/services/drone.service';
+import { AppError } from '../src/lib/utils';
+import { AppDataSource } from '../src/config';
 
 
 
-jest.mock('../config/typeorm.config', () => ({
+jest.mock('../src/config/typeorm.config', () => ({
     AppDataSource: {
         transaction: jest.fn()
     },

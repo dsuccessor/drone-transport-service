@@ -35,21 +35,4 @@ export class Drone {
     constructor(partial: Partial<Drone>) {
         Object.assign(this, partial);
     }
-
-    @BeforeInsert()
-    @BeforeUpdate()
-    async updateStatusBasedOnBattery() {
-        if (this.batteryCapacity && this.batteryCapacity < 25 && this.state !== DroneStateEnum.UNAVAILABLE) {
-            this.state = DroneStateEnum.UNAVAILABLE;
-        }
-
-        if ((this.batteryCapacity && this.batteryCapacity >= 25) && (this.state && this.state === DroneStateEnum.UNAVAILABLE)) {
-            this.state = DroneStateEnum.AVAILABLE;
-        }
-
-        if ((this.batteryCapacity && this.batteryCapacity >= 25) && !this.state) {
-            const drone = await AppDataSource.getRepository(Drone).findOne({ where: { serial: this.serial } });
-            if (drone && drone.state === DroneStateEnum.UNAVAILABLE) this.state = DroneStateEnum.AVAILABLE;
-        }
-    }
 }

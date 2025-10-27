@@ -1,3 +1,5 @@
+
+// globally handle error
 export class AppError extends Error {
     code?: string;
     statusCode?: number;

@@ -21,7 +21,7 @@ export async function seed() {
             model: getRandomEnumValue(DroneModelEnum),
             weightLimit: Math.min(weight, 500),
             batteryCapacity: Math.min(battery, 100),
-            state: battery >= 25 ? DroneStateEnum.IDLE : DroneStateEnum.UNAVAILABLE,
+            state: DroneStateEnum.IDLE,
         }
 
         drones.push(drone);
