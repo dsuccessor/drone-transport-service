@@ -58,7 +58,8 @@ export class DroneController {
 
     dronesBatteryLogs = async (req: Request, res: Response, next: NextFunction) => {
         try {
-            const result = await this.droneService.getBatteryLogs();
+            const { perPage, page } = req.body;
+            const result = await this.droneService.getBatteryLogs(perPage, page);
             return res.status(201).json({ success: true, status: 'success', data: result });
         } catch (err) {
             next(err);
