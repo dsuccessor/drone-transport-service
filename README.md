@@ -24,7 +24,18 @@ Data format: all input/output in JSON.
 
 # How to run
 
-# Run and start docker
+# Auto Runner (Containerized)
+
+This auto run enable to start database & app with just one command.
+
+1. Ensure you set the following env keys [DB_TYPE, DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME, NODE_ENV].
+2. Download & Install Docker
+3. Run `docker compose up -d` on the terminal
+4. Ready to go, Proceed to calling the endpoints.
+
+# Semi Auto Runner (Docker for DB only)
+
+Run and start docker
 
 ==> Setting up database
 
@@ -32,11 +43,11 @@ download docker locally
 
 set the following inside your .env [DB_TYPE, DB_HOST, DB_PORT, DB_USERNAME, DB_PASSWORD, DB_NAME]
 
-run docker compose up -d
+run `docker compose up -d` to start up database server
 
 # Starting up local server
 
-Requirements: Node.js >= 18, npm
+Requirements: Node.js >= 20, pnpm
 
 # install
 
@@ -66,6 +77,9 @@ The app will create all tables (drone, medication, droneMedication, batteryLog) 
 
 => Payload Sample <=
 
+=> Payload type <=
+
+Body:
 {
 "serial": "DRONE-002",
 "model": "Heavyweight",
@@ -79,6 +93,9 @@ The app will create all tables (drone, medication, droneMedication, batteryLog) 
 
 => Payload Sample <=
 
+=> Payload type <=
+
+Body:
 [{
 "name": "Paracetamol_500",
 "weight": 50,
@@ -102,7 +119,7 @@ The app will create all tables (drone, medication, droneMedication, batteryLog) 
 
 => GET /api/drones/:serial/medications — Get loaded medication items for a drone
 
-=> Payload Sample <=
+=> Response Sample <=
 
 {
 "success": true,
@@ -131,7 +148,14 @@ The app will create all tables (drone, medication, droneMedication, batteryLog) 
 
 => GET /api/drones/available — Get drones available for loading
 
-=> Payload Sample <=
+=> Payload type <=
+
+Query Param
+
+- weight: number;
+- optional
+
+=> Response Sample <=
 
 {
 "success": true,
@@ -151,7 +175,7 @@ The app will create all tables (drone, medication, droneMedication, batteryLog) 
 
 => GET /api/drones/:serial/battery — Get battery level for a drone
 
-=> Payload Sample <=
+=> Response Sample <=
 
 {
 "success": true,
@@ -169,7 +193,7 @@ The app will create all tables (drone, medication, droneMedication, batteryLog) 
 
 => GET /api/logs/battery — Get battery audit logs (paginated)
 
-=> Payload Sample <=
+=> Response Sample <=
 
 {
 "success": true,
