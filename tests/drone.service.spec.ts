@@ -56,7 +56,7 @@ describe('DroneService - loadDrone', () => {
     });
 
     it('should throw if drone is non-loadable', async () => {
-        const drone = { serial: 'DRONE-002', state: 'UNAVAILABLE', batteryCapacity: 100, medications: [], weightLimit: 500 } as any;
+        const drone = { serial: 'DRONE-002', state: 'DELIVERING', batteryCapacity: 100, medications: [], weightLimit: 500 } as any;
         droneRepo.findOne.mockResolvedValue(drone);
 
         await expect(service.loadDrone('DRONE-002', [])).rejects.toThrow(/not in a loadable state/);
