@@ -138,3 +138,29 @@ export const getLoadableDroneSchema = Joi.object({
             'number.max': 'Weight must be less than or equal to 500',
         })
 });
+
+export const getBatteryLogsSchema = Joi.object({
+    perPage: Joi.number()
+        .positive()
+        .integer()
+        .min(1)
+        .optional()
+        .messages({
+            'number.base': 'perPage must be a number',
+            'number.integer': 'perPage must be an integer',
+            'number.positive': 'perPage must be a positive number',
+            'number.min': 'perPage must not be less than 1',
+        }),
+
+    page: Joi.number()
+        .positive()
+        .integer()
+        .max(500)
+        .optional()
+        .messages({
+            'number.base': 'page must be a number',
+            'number.integer': 'page must be an integer',
+            'number.positive': 'page must be a positive number',
+            'number.min': 'page must not be less than 1',
+        })
+});

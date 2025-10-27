@@ -2,7 +2,10 @@ import { NextFunction, Request, Response } from "express";
 import { AppError } from "./error-handler.util";
 
 export function handleError() {
+    console.log({ me: "TEST" });
+
     return (err: any, req: Request, res: Response, next: NextFunction) => {
+        console.log({ me: "TEST - 2" });
         const error = {
             message: err?.message ?? 'Internal Server Error',
             statusCode: 500

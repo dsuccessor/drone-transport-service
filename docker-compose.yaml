@@ -14,7 +14,7 @@ services:
     volumes:
       - postgres-data:/var/lib/postgresql/data
     networks:
-      - drone-transport-service-test
+      - drone-transport-service
     healthcheck:
       test: ["CMD-SHELL", "pg_isready -U drone_transport -d drone_transport"]
       interval: 5s
@@ -40,7 +40,7 @@ services:
     ports:
       - "3000:3000"
     networks:
-      - drone-transport-service-test
+      - drone-transport-service
     command: >
       sh -c "
         echo '⏳ Waiting for DB...';
@@ -52,7 +52,7 @@ services:
       "
 
 networks:
-  drone-transport-service-test:
+  drone-transport-service:
     driver: bridge
 
 volumes:

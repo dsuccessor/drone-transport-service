@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { container } from 'tsyringe';
 import { DroneController } from '../controllers';
-import { droneSchema, getLoadableDroneSchema, loadMedicationSchema, validateQueryParamSchema, validateSchema } from '../schemas';
+import { droneSchema, getBatteryLogsSchema, getLoadableDroneSchema, loadMedicationSchema, validateQueryParamSchema, validateSchema } from '../schemas';
 
 const router = Router();
 
@@ -24,7 +24,7 @@ export function registerDroneRoutes() {
     router.get("/drones/:serial/battery", droneController.droneBatteryLevel);
 
     // Get battery logs
-    router.get("/logs/battery", droneController.dronesBatteryLogs);
+    router.get("/logs/battery", validateSchema(getBatteryLogsSchema), droneController.dronesBatteryLogs);
 
     return router;
 }
