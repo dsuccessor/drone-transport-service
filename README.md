@@ -199,6 +199,19 @@ Query Param
 
 => `GET /api/logs/battery` — Get battery audit logs (paginated)
 
+=> Sample Payload <=
+
+=> Payload type <=
+
+`Body:`
+
+required: Optional
+
+`{`
+`"perPage": 5,`
+`"page": 2`
+`}`
+
 => Response Sample <=
 
 `{`
